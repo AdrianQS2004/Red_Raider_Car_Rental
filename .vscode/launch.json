@@ -3,19 +3,17 @@
     "configurations": [
         {
             "type": "java",
-            "name": "App",
+            "name": "RSMain2",
             "request": "launch",
-            "mainClass": "App",
+            "mainClass": "RSMain2",
             "projectName": "Red_Raider_Car_Rental_9769d3df"
         },
         {
             "type": "java",
-            "name": "Main with Arguments",
+            "name": "LMMain",
             "request": "launch",
-            "mainClass": "Main",
-            "args": [
-                ""
-            ]
+            "mainClass": "LMMain",
+            "projectName": "Red_Raider_Car_Rental_9769d3df"
         }
     ]
 }
