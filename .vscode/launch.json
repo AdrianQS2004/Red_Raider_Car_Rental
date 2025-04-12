@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "App",
+            "projectName": "Red_Raider_Car_Rental_9769d3df"
+        },
+        {
+            "type": "java",
+            "name": "Main with Arguments",
+            "request": "launch",
+            "mainClass": "Main",
+            "args": [
+                ""
+            ]
+        }
+    ]
+}
