@@ -13,7 +13,8 @@
             "name": "LMMain",
             "request": "launch",
             "mainClass": "LMMain",
-            "projectName": "Red_Raider_Car_Rental_9769d3df"
+            "projectName": "Red_Raider_Car_Rental_9769d3df",
+            "args": ["central","2","1","1"]
         }
     ]
 }
