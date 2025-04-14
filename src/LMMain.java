@@ -14,8 +14,8 @@ public class LMMain {
         int vans = Integer.parseInt(args[3]);
         String plateToRemove = args.length >= 5 ? args[4] : null;
 
-        ManagerLot lotManager = new ManagerLot();
         try {
+            ManagerLot lotManager = new ManagerLot();
             lotManager.manageLot(lotName, sedans, suvs, vans, plateToRemove);
         } catch (IOException e) {
             System.out.println("An error occurred: " + e.getMessage());

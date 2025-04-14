@@ -10,6 +10,11 @@ public class PlateGenerator {
         this.random = new Random();
     }
 
+    public PlateGenerator(Set<String> existingPlates) {
+        this.usedPlates = new HashSet<>(existingPlates);
+        this.random = new Random();
+    }
+
     public void loadExistingPlates(Set<String> existing) {
         usedPlates.addAll(existing);
     }
@@ -22,6 +27,10 @@ public class PlateGenerator {
 
         usedPlates.add(plate);
         return plate;
+    }
+
+    public Set<String> getUsedPlates() {
+        return new HashSet<>(usedPlates);
     }
 
     private String randomLetters(int length) {

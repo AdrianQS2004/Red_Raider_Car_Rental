@@ -2,28 +2,58 @@ package LotManager;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ManagerLot {
     private final PlateGenerator plateGenerator;
     private static final String LOTS_DIR = "src/LotManager/lots";
 
-    public ManagerLot() {
+    public ManagerLot() throws IOException {
         this.plateGenerator = new PlateGenerator();
+        loadAllExistingPlates();
+    }
+
+    private void loadAllExistingPlates() throws IOException {
+        Set<String> allPlates = new HashSet<>();
+        Path lotsDir = Paths.get(LOTS_DIR);
+        
+        if (Files.exists(lotsDir)) {
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(lotsDir, "*.txt")) {
+                for (Path lotFile : stream) {
+                    List<Vehicle> vehicles = loadLotFile(lotFile);
+                    for (Vehicle v : vehicles) {
+                        allPlates.add(v.getLicensePlate());
+                    }
+                }
+            }
+        }
+        
+        plateGenerator.loadExistingPlates(allPlates);
     }
 
     public void manageLot(String lotName, int sedans, int suvs, int vans, String removePlate) throws IOException {
         Path lotPath = Paths.get(LOTS_DIR, lotName + ".txt");
         List<Vehicle> vehicles = loadLotFile(lotPath);
-        Set<String> existingPlates = new HashSet<>();
-        for (Vehicle v : vehicles) existingPlates.add(v.getLicensePlate());
-        plateGenerator.loadExistingPlates(existingPlates);
 
         addVehicles(vehicles, "SEDAN", sedans);
         addVehicles(vehicles, "SUV", suvs);
         addVehicles(vehicles, "VAN", vans);
 
+        // I need to implement a method to remove a vehicle from a parking lot by its license plate. When a vehicle is removed:
+        // The vehicle should be removed from the lot's list of vehicles
+        // The system should track that the removed vehicle's plate is no longer in use
+        // The plate should become available for reuse in the future
+        // The system should only update the plate tracking if a vehicle was actually removed
+        // The lot file should be saved with the updated vehicle list
+
         if (removePlate != null && !removePlate.isEmpty()) {
-            vehicles.removeIf(v -> v.getLicensePlate().equals(removePlate));
+            boolean removed = vehicles.removeIf(v -> v.getLicensePlate().equals(removePlate));
+            if (removed) {
+                // Update plate generator with remaining plates
+                plateGenerator.loadExistingPlates(vehicles.stream()
+                    .map(Vehicle::getLicensePlate)
+                    .collect(Collectors.toSet()));
+            }
         }
 
         saveLotFile(lotPath, vehicles);
