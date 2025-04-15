@@ -9,7 +9,7 @@ public class RentalShop {
     private String location;
     private List<Vehicle> availableVehicles;
     private List<Vehicle> rentedVehicles;
-    private static final String RENTALS_DIR = "src/SharedFiles/rentals";
+    //private static final String RENTALS_DIR = "src/SharedFiles/rentals";
 
     public RentalShop(String name, String location) throws IOException {
         this.name = name;
