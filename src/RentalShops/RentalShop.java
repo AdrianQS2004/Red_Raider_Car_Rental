@@ -34,24 +34,16 @@ public class RentalShop {
 
     private void saveRentedVehicles() {
         try {
-            // Load existing rented vehicles
-            List<Vehicle> allRentedVehicles = FileManager.loadLotFile(RENTED_CARS_FILE);
-            
-            // Add new rented vehicles that aren't already in the list
-            for (Vehicle vehicle : rentedVehicles) {
-                if (!allRentedVehicles.contains(vehicle)) {
-                    allRentedVehicles.add(vehicle);
-                }
-            }
-            
             // Save all rented vehicles
-            FileManager.saveLotFile(RENTED_CARS_FILE, allRentedVehicles);
+            FileManager.saveLotFile(RENTED_CARS_FILE, rentedVehicles);
         } catch (IOException e) {
             System.err.println("Error saving rented vehicles: " + e.getMessage());
         }
     }
 
-    public boolean rent(String vehicleType) throws IOException {
+    public void rent(String vehicleType) throws IOException {
+        System.out.println("\nAttempting to rent a " + vehicleType + "...");
+        
         // First, search in available vehicles
         Optional<Vehicle> vehicleOpt = availableVehicles.stream()
             .filter(v -> v.getType().equalsIgnoreCase(vehicleType))
@@ -59,14 +51,19 @@ public class RentalShop {
 
         if (vehicleOpt.isPresent()) {
             Vehicle vehicle = vehicleOpt.get();
+            System.out.println("Found " + vehicleType + " in available vehicles: " + vehicle.getLicensePlate());
             availableVehicles.remove(vehicle);
             rentedVehicles.add(vehicle);
             saveRentedVehicles();
-            return true;
+            System.out.println("Successfully rented " + vehicle.getLicensePlate() + " from available vehicles!");
+            return;
         }
 
+        System.out.println("No " + vehicleType + " found in available vehicles. Searching in accessible lots...");
+        
         // If not found in available vehicles, search in accessible lots
         for (String lotName : accessibleLots) {
+            System.out.println("Checking lot: " + lotName);
             List<Vehicle> lotVehicles = FileManager.loadLotFile(lotName.trim());
             Optional<Vehicle> lotVehicleOpt = lotVehicles.stream()
                 .filter(v -> v.getType().equalsIgnoreCase(vehicleType))
@@ -74,18 +71,23 @@ public class RentalShop {
 
             if (lotVehicleOpt.isPresent()) {
                 Vehicle vehicle = lotVehicleOpt.get();
+                System.out.println("Found " + vehicleType + " in lot " + lotName + ": " + vehicle.getLicensePlate());
+                
                 // Remove from lot
                 lotVehicles.remove(vehicle);
                 FileManager.saveLotFile(lotName.trim(), lotVehicles);
+                System.out.println("Removed " + vehicle.getLicensePlate() + " from lot " + lotName);
                 
                 // Add to rented vehicles
                 rentedVehicles.add(vehicle);
                 saveRentedVehicles();
-                return true;
+                System.out.println("Successfully rented " + vehicle.getLicensePlate() + " from lot " + lotName + "!");
+                return;
             }
+            System.out.println("No " + vehicleType + " found in lot " + lotName);
         }
 
-        return false;
+        System.out.println("No " + vehicleType + " available in any accessible lot.");
     }
 
     public void returnAllVehicles() throws IOException {
