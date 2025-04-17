@@ -5,74 +5,103 @@ import LotManager.Vehicle;
 import SharedFiles.FileManager;
 
 public class RentalShop {
-    private String name;
     private String location;
+    private int spaces;
+    private String[] accessibleLots;
     private List<Vehicle> availableVehicles;
     private List<Vehicle> rentedVehicles;
-    //private static final String RENTALS_DIR = "src/SharedFiles/rentals";
+    private Random random;
+    private static final String RENTALS_DIR = "src/SharedFiles/rentals";
 
-    public RentalShop(String name, String location) throws IOException {
-        this.name = name;
+    public RentalShop(String location, int spaces, String[] accessibleLots) {
         this.location = location;
+        this.spaces = spaces;
+        this.accessibleLots = accessibleLots;
         this.availableVehicles = new ArrayList<>();
         this.rentedVehicles = new ArrayList<>();
-        loadShopData();
+        this.random = new Random();
+        loadRentedVehicles();
     }
 
-    private void loadShopData() throws IOException {
-        // Load available vehicles from the shop's file
-        availableVehicles = FileManager.loadLotFile(name + "_available");
-        
-        // Load rented vehicles from the shop's file
-        rentedVehicles = FileManager.loadLotFile(name + "_rented");
+    private void loadRentedVehicles() {
+        try {
+            File rentedFile = new File(RENTALS_DIR, location + "_rented.txt");
+            if (rentedFile.exists()) {
+                List<Vehicle> loadedVehicles = FileManager.loadLotFile(location + "_rented");
+                rentedVehicles.addAll(loadedVehicles);
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading rented vehicles: " + e.getMessage());
+        }
     }
 
-    public void saveShopData() throws IOException {
-        // Save available vehicles
-        FileManager.saveLotFile(name + "_available", availableVehicles);
-        
-        // Save rented vehicles
-        FileManager.saveLotFile(name + "_rented", rentedVehicles);
+    private void saveRentedVehicles() {
+        try {
+            File rentalsDir = new File(RENTALS_DIR);
+            if (!rentalsDir.exists()) {
+                rentalsDir.mkdirs();
+            }
+            FileManager.saveLotFile(location + "_rented", rentedVehicles);
+        } catch (IOException e) {
+            System.err.println("Error saving rented vehicles: " + e.getMessage());
+        }
     }
 
-    public boolean rentVehicle(String plateNumber, String customerName, int rentalDays) {
-        // Find the vehicle in available vehicles
+    public boolean rent(String vehicleType) throws IOException {
+        // First, search in available vehicles
         Optional<Vehicle> vehicleOpt = availableVehicles.stream()
-            .filter(v -> v.getLicensePlate().equals(plateNumber))
+            .filter(v -> v.getType().equalsIgnoreCase(vehicleType))
             .findFirst();
 
         if (vehicleOpt.isPresent()) {
             Vehicle vehicle = vehicleOpt.get();
-            // Remove from available
             availableVehicles.remove(vehicle);
-            // Add to rented
             rentedVehicles.add(vehicle);
+            saveRentedVehicles();
             return true;
         }
+
+        // If not found in available vehicles, search in accessible lots
+        for (String lotName : accessibleLots) {
+            List<Vehicle> lotVehicles = FileManager.loadLotFile(lotName.trim());
+            Optional<Vehicle> lotVehicleOpt = lotVehicles.stream()
+                .filter(v -> v.getType().equalsIgnoreCase(vehicleType))
+                .findFirst();
+
+            if (lotVehicleOpt.isPresent()) {
+                Vehicle vehicle = lotVehicleOpt.get();
+                // Remove from lot
+                lotVehicles.remove(vehicle);
+                FileManager.saveLotFile(lotName.trim(), lotVehicles);
+                
+                // Add to rented vehicles
+                rentedVehicles.add(vehicle);
+                saveRentedVehicles();
+                return true;
+            }
+        }
+
         return false;
     }
 
-    public boolean returnVehicle(String plateNumber, int kilometersDriven) {
-        // Find the vehicle in rented vehicles
-        Optional<Vehicle> vehicleOpt = rentedVehicles.stream()
-            .filter(v -> v.getLicensePlate().equals(plateNumber))
-            .findFirst();
-
-        if (vehicleOpt.isPresent()) {
-            Vehicle vehicle = vehicleOpt.get();
-            // Update kilometers
-            vehicle.setKilometers(vehicle.getKilometers() + kilometersDriven);
-            // Remove from rented
-            rentedVehicles.remove(vehicle);
-            // Add back to available
-            availableVehicles.add(vehicle);
-            return true;
+    public void returnAllVehicles() throws IOException {
+        // Only return available vehicles to random lots
+        for (Vehicle vehicle : availableVehicles) {
+            // Select a random lot
+            String randomLot = accessibleLots[random.nextInt(accessibleLots.length)];
+            
+            // Load the lot's vehicles
+            List<Vehicle> lotVehicles = FileManager.loadLotFile(randomLot.trim());
+            
+            // Add the vehicle to the lot
+            lotVehicles.add(vehicle);
+            
+            // Save the updated lot
+            FileManager.saveLotFile(randomLot.trim(), lotVehicles);
         }
-        return false;
-    }
-
-    public void addVehicles(List<Vehicle> vehicles) {
-        availableVehicles.addAll(vehicles);
+        
+        // Clear available vehicles list
+        availableVehicles.clear();
     }
 
     public List<Vehicle> getAvailableVehicles() {
@@ -83,11 +112,15 @@ public class RentalShop {
         return new ArrayList<>(rentedVehicles);
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getLocation() {
         return location;
+    }
+
+    public int getSpaces() {
+        return spaces;
+    }
+
+    public String[] getAccessibleLots() {
+        return accessibleLots;
     }
 } 

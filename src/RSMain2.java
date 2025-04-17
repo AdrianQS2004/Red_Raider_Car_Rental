@@ -13,40 +13,48 @@ public class RSMain2 {
             return;
         }
 
+        RentalShop rentalShop = null;
         try {
             String location = args[0];
             int spaces = Integer.parseInt(args[1]);
-            String[] lotNames = args[2].split(",");
+            String[] accessibleLots = args[2].split(",");
 
             // Create a new rental shop with the specified parameters
-            // Use location as both name and location for simplicity
-            RentalShop rentalShop = new RentalShop(location, location);
+            rentalShop = new RentalShop(location, spaces, accessibleLots);
             
-            // Load vehicles from all specified lots
-            List<Vehicle> allVehicles = new ArrayList<>();
-            for (String lotName : lotNames) {
-                List<Vehicle> vehicles = FileManager.loadLotFile(lotName.trim());
-                allVehicles.addAll(vehicles);
+            // Example usage of the rent method
+            System.out.println("Attempting to rent a SEDAN...");
+            if (rentalShop.rent("SEDAN")) {
+                System.out.println("Successfully rented a SEDAN!");
+            } else {
+                System.out.println("No SEDAN available in any accessible lot.");
             }
             
-            // Add vehicles to the shop (up to the space limit)
-            int vehiclesToAdd = Math.min(allVehicles.size(), spaces);
-            rentalShop.addVehicles(allVehicles.subList(0, vehiclesToAdd));
-            
-            // Display available vehicles
-            System.out.println("Available vehicles at " + rentalShop.getName() + ":");
+            // Display available and rented vehicles
+            System.out.println("\nAvailable vehicles at " + rentalShop.getLocation() + ":");
             for (Vehicle v : rentalShop.getAvailableVehicles()) {
                 System.out.println(v.getType() + " - " + v.getLicensePlate() + " (Kilometers: " + v.getKilometers() + ")");
             }
             
-            // Save the shop data
-            rentalShop.saveShopData();
+            System.out.println("\nRented vehicles:");
+            for (Vehicle v : rentalShop.getRentedVehicles()) {
+                System.out.println(v.getType() + " - " + v.getLicensePlate() + " (Kilometers: " + v.getKilometers() + ")");
+            }
             
         } catch (IOException e) {
             System.err.println("Error occurred: " + e.getMessage());
             e.printStackTrace();
         } catch (NumberFormatException e) {
             System.err.println("Invalid number format for spaces: " + args[1]);
+        } finally {
+            // Return all vehicles to random lots when the program exits
+            if (rentalShop != null) {
+                try {
+                    rentalShop.returnAllVehicles();
+                } catch (IOException e) {
+                    System.err.println("Error returning vehicles: " + e.getMessage());
+                }
+            }
         }
     }
 }
