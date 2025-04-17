@@ -20,8 +20,11 @@ public class RSMain2 {
             rentalShop = new RentalShop(location, spaces, accessibleLots);
             
             // Example usage of the rent method
-            rentalShop.rent("SEDAN");
+            //rentalShop.rent("SEDAN");
+            rentalShop.returnVehicle("ZRB-747", 100);
             
+            rentalShop.returnAllVehicles();
+
         } catch (IOException e) {
             System.out.println("An error occurred: " + e.getMessage());
         }
