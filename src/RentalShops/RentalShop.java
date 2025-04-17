@@ -3,6 +3,8 @@ import java.io.*;
 import java.util.*;
 import LotManager.Vehicle;
 import SharedFiles.FileManager;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 public class RentalShop {
     private String location;
@@ -11,7 +13,8 @@ public class RentalShop {
     private List<Vehicle> availableVehicles;
     private List<Vehicle> rentedVehicles;
     private Random random;
-    private static final String RENTALS_DIR = "src/SharedFiles/rentals";
+    private static final String SHARED_FILES_DIR = "src/SharedFiles";
+    private static final String RENTED_CARS_FILE = "rented_cars.txt";
 
     public RentalShop(String location, int spaces, String[] accessibleLots) {
         this.location = location;
@@ -25,10 +28,15 @@ public class RentalShop {
 
     private void loadRentedVehicles() {
         try {
-            File rentedFile = new File(RENTALS_DIR, location + "_rented.txt");
+            File rentedFile = new File(SHARED_FILES_DIR, RENTED_CARS_FILE);
             if (rentedFile.exists()) {
-                List<Vehicle> loadedVehicles = FileManager.loadLotFile(location + "_rented");
-                rentedVehicles.addAll(loadedVehicles);
+                List<String> lines = Files.readAllLines(rentedFile.toPath());
+                for (String line : lines) {
+                    String[] parts = line.split(",");
+                    if (parts.length == 3) {
+                        rentedVehicles.add(new Vehicle(parts[0], parts[1], Integer.parseInt(parts[2])));
+                    }
+                }
             }
         } catch (IOException e) {
             System.err.println("Error loading rented vehicles: " + e.getMessage());
@@ -37,11 +45,32 @@ public class RentalShop {
 
     private void saveRentedVehicles() {
         try {
-            File rentalsDir = new File(RENTALS_DIR);
-            if (!rentalsDir.exists()) {
-                rentalsDir.mkdirs();
+            File rentedFile = new File(SHARED_FILES_DIR, RENTED_CARS_FILE);
+            Files.createDirectories(rentedFile.getParentFile().toPath());
+            
+            // Load existing rented vehicles
+            Set<String> existingPlates = new HashSet<>();
+            if (rentedFile.exists()) {
+                List<String> lines = Files.readAllLines(rentedFile.toPath());
+                for (String line : lines) {
+                    String[] parts = line.split(",");
+                    if (parts.length > 0) {
+                        existingPlates.add(parts[0]);
+                    }
+                }
             }
-            FileManager.saveLotFile(location + "_rented", rentedVehicles);
+            
+            // Append new rented vehicles
+            try (BufferedWriter writer = Files.newBufferedWriter(rentedFile.toPath(), 
+                    StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
+                for (Vehicle vehicle : rentedVehicles) {
+                    if (!existingPlates.contains(vehicle.getLicensePlate())) {
+                        writer.write(vehicle.toString());
+                        writer.newLine();
+                        existingPlates.add(vehicle.getLicensePlate());
+                    }
+                }
+            }
         } catch (IOException e) {
             System.err.println("Error saving rented vehicles: " + e.getMessage());
         }
