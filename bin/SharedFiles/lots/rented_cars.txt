@@ -1,1 +1,2 @@
 QQA-896,SEDAN,0,false
+VWB-605,SEDAN,0,true

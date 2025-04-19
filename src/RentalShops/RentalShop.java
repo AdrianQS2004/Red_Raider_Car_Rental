@@ -78,10 +78,12 @@ public class RentalShop {
                 FileManager.saveLotFile(lotName.trim(), lotVehicles);
                 System.out.println("Removed " + vehicle.getLicensePlate() + " from lot " + lotName);
                 
-                // Add to rented vehicles
+                // Add to rented vehicles and add the Discount
+                vehicle.toggleDiscount();
                 rentedVehicles.add(vehicle);
                 saveRentedVehicles();
                 System.out.println("Successfully rented " + vehicle.getLicensePlate() + " from lot " + lotName + "!");
+                System.out.println("A 10% discount has been applied to the rental price because of the delay in delivery.");
                 return;
             }
             System.out.println("No " + vehicleType + " found in lot " + lotName);
