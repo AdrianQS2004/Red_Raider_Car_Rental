@@ -7,7 +7,7 @@
             "request": "launch",
             "mainClass": "RSMain2",
             "projectName": "Red_Raider_Car_Rental_9769d3df",
-            "args": ["Los Angeles", "20","central"]
+            "args": ["Los Angeles", "20","central,Airport Lot"]
             //"args": ["Airport Lot","13","6","4"]
         },
         {

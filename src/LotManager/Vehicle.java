@@ -25,6 +25,10 @@ public class Vehicle {
         return kilometers;
     }
 
+    public void AddKilometers(int kilometers) {
+        this.kilometers = kilometers + this.kilometers;
+    }
+
     public void setKilometers(int kilometers) {
         this.kilometers = kilometers;
     }

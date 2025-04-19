@@ -92,6 +92,41 @@ public class RentalShop {
         System.out.println("No " + vehicleType + " available in any accessible lot.");
     }
 
+    public void returnVehicle(String licensePlate, int kilometers) throws IOException {
+        System.out.println("\nAttempting to return vehicle with plate: " + licensePlate);
+        
+        // Load all rented vehicles
+        List<Vehicle> rentedVehicles = FileManager.loadLotFile(RENTED_CARS_FILE);
+        
+        // Search for the vehicle with the given license plate
+        Optional<Vehicle> vehicleOpt = rentedVehicles.stream()
+            .filter(v -> v.getLicensePlate().equals(licensePlate))
+            .findFirst();
+            
+        if (vehicleOpt.isPresent()) {
+            Vehicle vehicle = vehicleOpt.get();
+            System.out.println("Found vehicle: " + vehicle.getType() + " - " + vehicle.getLicensePlate());
+            
+            // Remove from rented vehicles
+            rentedVehicles.remove(vehicle);
+            System.out.println("Removed vehicle from rented cars list");
+            
+            // Update kilometers
+            vehicle.AddKilometers(kilometers);
+            System.out.println("Updated kilometers to: " + kilometers);
+            
+            // Add to available vehicles
+            availableVehicles.add(vehicle);
+            System.out.println("Added vehicle to available vehicles list");
+            
+            // Save changes to rented cars file
+            FileManager.saveLotFile(RENTED_CARS_FILE, rentedVehicles);
+            System.out.println("Successfully saved changes to rented cars file");
+        } else {
+            System.out.println("No vehicle found with license plate: " + licensePlate);
+        }
+    }
+
     public void returnAllVehicles() throws IOException {
         // Only return available vehicles to random lots
         for (Vehicle vehicle : availableVehicles) {
@@ -130,40 +165,5 @@ public class RentalShop {
 
     public String[] getAccessibleLots() {
         return accessibleLots;
-    }
-
-    public void returnVehicle(String licensePlate, int kilometers) throws IOException {
-        System.out.println("\nAttempting to return vehicle with plate: " + licensePlate);
-        
-        // Load all rented vehicles
-        List<Vehicle> rentedVehicles = FileManager.loadLotFile(RENTED_CARS_FILE);
-        
-        // Search for the vehicle with the given license plate
-        Optional<Vehicle> vehicleOpt = rentedVehicles.stream()
-            .filter(v -> v.getLicensePlate().equals(licensePlate))
-            .findFirst();
-            
-        if (vehicleOpt.isPresent()) {
-            Vehicle vehicle = vehicleOpt.get();
-            System.out.println("Found vehicle: " + vehicle.getType() + " - " + vehicle.getLicensePlate());
-            
-            // Remove from rented vehicles
-            rentedVehicles.remove(vehicle);
-            System.out.println("Removed vehicle from rented cars list");
-            
-            // Update kilometers
-            vehicle.setKilometers(kilometers);
-            System.out.println("Updated kilometers to: " + kilometers);
-            
-            // Add to available vehicles
-            availableVehicles.add(vehicle);
-            System.out.println("Added vehicle to available vehicles list");
-            
-            // Save changes to rented cars file
-            FileManager.saveLotFile(RENTED_CARS_FILE, rentedVehicles);
-            System.out.println("Successfully saved changes to rented cars file");
-        } else {
-            System.out.println("No vehicle found with license plate: " + licensePlate);
-        }
     }
 } 
