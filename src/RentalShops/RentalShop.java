@@ -11,11 +11,13 @@ public class RentalShop {
     private List<Vehicle> availableVehicles;
     private List<Vehicle> rentedVehicles;
     private Random random;
+    private int Money;
     private static final String RENTED_CARS_FILE = "rented_cars";
 
     public RentalShop(String location, int spaces, String[] accessibleLots) {
         this.location = location;
-        this.spaces = spaces;
+        this.spaces = spaces; 
+        this.Money = 0;
         this.accessibleLots = accessibleLots;
         this.availableVehicles = new ArrayList<>();
         this.rentedVehicles = new ArrayList<>();
