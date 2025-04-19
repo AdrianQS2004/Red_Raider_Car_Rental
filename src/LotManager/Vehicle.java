@@ -4,11 +4,13 @@ public class Vehicle {
     private String licensePlate;
     private String type; // SEDAN, SUV, VAN
     private int kilometers;
+    private boolean discount;
 
     public Vehicle(String licensePlate, String type, int kilometers) {
         this.licensePlate = licensePlate;
         this.type = type;
         this.kilometers = kilometers;
+        this.discount = false;
     }
 
     public String getLicensePlate() {
@@ -27,8 +29,20 @@ public class Vehicle {
         this.kilometers = kilometers;
     }
 
+    public boolean getDiscount() {
+        return discount;
+    }
+
+    public void toggleDiscount() {
+        discount = !discount;
+    }
+
+    public void setDiscount(boolean value) {
+        discount = value;
+    }
+
     @Override
     public String toString() {
-        return licensePlate + "," + type + "," + kilometers;
+        return licensePlate + "," + type + "," + kilometers + "," + discount;
     }
 }

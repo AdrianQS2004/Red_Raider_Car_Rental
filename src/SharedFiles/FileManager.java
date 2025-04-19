@@ -16,8 +16,13 @@ public class FileManager {
             List<String> lines = Files.readAllLines(path);
             for (String line : lines) {
                 String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    vehicles.add(new Vehicle(parts[0], parts[1], Integer.parseInt(parts[2])));
+                if (parts.length >= 3) {
+                    Vehicle vehicle = new Vehicle(parts[0], parts[1], Integer.parseInt(parts[2]));
+                    // Set discount based on the fourth part
+                    if (parts.length >= 4) {
+                        vehicle.setDiscount(Boolean.parseBoolean(parts[3]));
+                    }
+                    vehicles.add(vehicle);
                 }
             }
         }
