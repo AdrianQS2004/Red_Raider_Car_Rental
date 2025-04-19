@@ -17,3 +17,9 @@ TFL-526,VAN,0,false
 NMJ-321,VAN,0,false
 FJV-779,VAN,0,false
 GEI-314,VAN,0,false
+LAG-545,VAN,0,false
+QOP-801,SUV,0,false
+XCF-232,VAN,0,false
+MXM-961,SUV,0,false
+DWC-364,SUV,0,false
+SWE-377,VAN,0,false

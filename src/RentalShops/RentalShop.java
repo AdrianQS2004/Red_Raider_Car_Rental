@@ -17,7 +17,7 @@ public class RentalShop {
     public RentalShop(String location, int spaces, String[] accessibleLots) {
         this.location = location;
         this.spaces = spaces; 
-        this.Money = 0;
+        this.Money = 0;  
         this.accessibleLots = accessibleLots;
         this.availableVehicles = new ArrayList<>();
         this.rentedVehicles = new ArrayList<>();
@@ -167,5 +167,71 @@ public class RentalShop {
 
     public String[] getAccessibleLots() {
         return accessibleLots;
+    }
+
+    public void loadRandomVehicles() throws IOException {
+        int vehiclesToLoad = spaces / 2;
+        System.out.println("\nLoading " + vehiclesToLoad + " random vehicles from accessible lots...");
+        
+        // Get all vehicles from accessible lots
+        List<Vehicle> allVehicles = new ArrayList<>();
+        for (String lotName : accessibleLots) {
+            List<Vehicle> lotVehicles = FileManager.loadLotFile(lotName.trim());
+            allVehicles.addAll(lotVehicles);
+        }
+        
+        if (allVehicles.isEmpty()) {
+            System.out.println("No vehicles found in any accessible lot.");
+            return;
+        }
+        
+        // Randomly select vehicles
+        for (int i = 0; i < vehiclesToLoad && !allVehicles.isEmpty(); i++) {
+            int randomIndex = random.nextInt(allVehicles.size());
+            Vehicle selectedVehicle = allVehicles.remove(randomIndex);
+            availableVehicles.add(selectedVehicle);
+            System.out.println("Added vehicle: " + selectedVehicle.getType() + " - " + selectedVehicle.getLicensePlate());
+        }
+        
+        System.out.println("Successfully loaded " + availableVehicles.size() + " vehicles into the shop.");
+    }
+
+    private void returnLeastUsedVehicle() throws IOException {
+        if (availableVehicles.isEmpty()) {
+            System.out.println("No vehicles available to return.");
+            return;
+        }
+
+        // Find vehicle with fewest kilometers
+        Vehicle leastUsedVehicle = availableVehicles.stream()
+            .min((v1, v2) -> Integer.compare(v1.getKilometers(), v2.getKilometers()))
+            .get();
+            
+        System.out.println("Found least used vehicle: " + leastUsedVehicle.getType() + " - " + 
+            leastUsedVehicle.getLicensePlate() + " (Kilometers: " + leastUsedVehicle.getKilometers() + ")");
+
+        // Find lot with least vehicles
+        String leastUsedLot = null;
+        int minVehicles = Integer.MAX_VALUE;
+        
+        for (String lotName : accessibleLots) {
+            List<Vehicle> lotVehicles = FileManager.loadLotFile(lotName.trim());
+            if (lotVehicles.size() < minVehicles) {
+                minVehicles = lotVehicles.size();
+                leastUsedLot = lotName;
+            }
+        }
+        
+        System.out.println("Found lot with least vehicles: " + leastUsedLot + " (Vehicles: " + minVehicles + ")");
+        
+        // Add vehicle to the lot
+        List<Vehicle> lotVehicles = FileManager.loadLotFile(leastUsedLot.trim());
+        lotVehicles.add(leastUsedVehicle);
+        FileManager.saveLotFile(leastUsedLot.trim(), lotVehicles);
+        
+        // Remove from available vehicles
+        availableVehicles.remove(leastUsedVehicle);
+        
+        System.out.println("Successfully returned vehicle to lot " + leastUsedLot);
     }
 } 
