@@ -1,4 +1,3 @@
-NFZ-048,SUV,0,false
 IIQ-307,SUV,0,false
 EEU-710,SUV,0,false
 DFV-052,SUV,0,false
@@ -10,7 +9,6 @@ XWL-991,SUV,0,false
 CAU-247,SUV,0,false
 CIY-444,SUV,0,false
 CCQ-150,SUV,0,false
-JLV-879,VAN,0,false
 LAG-545,VAN,0,false
 USZ-406,VAN,0,false
 CMU-739,VAN,0,false
