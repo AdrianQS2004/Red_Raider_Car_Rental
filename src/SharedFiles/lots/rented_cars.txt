@@ -1,3 +1,0 @@
-VWB-605,SEDAN,0,true
-PZT-000,SEDAN,0,true
-GBS-250,SEDAN,0,false

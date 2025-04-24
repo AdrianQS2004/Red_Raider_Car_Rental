@@ -10,8 +10,10 @@ public class RentalShop {
     private String[] accessibleLots;
     private List<Vehicle> availableVehicles;
     private List<Vehicle> rentedVehicles;
-    private Random random;
+    private Map<Vehicle, Integer> vehiclePrices = new HashMap<>();
     private int Money;
+    private int MoneyLost;
+    private Random random;
     private static final String RENTED_CARS_FILE = "rented_cars";
 
     public RentalShop(String location, int spaces, String[] accessibleLots) {
@@ -58,6 +60,10 @@ public class RentalShop {
             rentedVehicles.add(vehicle);
             saveRentedVehicles();
             System.out.println("Successfully rented " + vehicle.getLicensePlate() + " from available vehicles!");
+            if (availableVehicles.size() == 0) {
+                System.out.println("No available vehicles, loading a random vehicle...");
+                loadRandomVehicles(1);
+            }
             return;
         }
 
@@ -121,12 +127,30 @@ public class RentalShop {
             availableVehicles.add(vehicle);
             System.out.println("Added vehicle to available vehicles list");
             
+            //Calculates and saves the Money made by the store
+            DoTransaction(vehicle, kilometers);
+
+            // Check if we only have one space left before reaching capacity
+            if (availableVehicles.size() == spaces - 1) {
+                returnLeastUsedVehicle();
+            }
             // Save changes to rented cars file
             FileManager.saveLotFile(RENTED_CARS_FILE, rentedVehicles);
             System.out.println("Successfully saved changes to rented cars file");
         } else {
             System.out.println("No vehicle found with license plate: " + licensePlate);
         }
+    }
+
+    public void TransactionHistory() {
+        System.out.println("\nTransaction History: \n");
+        for (Vehicle vehicle : vehiclePrices.keySet()) {
+            System.out.println(vehicle.getType() + " - " + vehicle.getLicensePlate() + 
+                             " - Discount: " + vehicle.getDiscount() + 
+                             " - Price: $" + vehiclePrices.get(vehicle));
+        }
+        System.out.println("Total Money Lost: $" + MoneyLost);
+        System.out.println("Total Money Made: $" + Money);
     }
 
     public void returnAllVehicles() throws IOException {
@@ -149,28 +173,7 @@ public class RentalShop {
         availableVehicles.clear();
     }
 
-    public List<Vehicle> getAvailableVehicles() {
-        return new ArrayList<>(availableVehicles);
-    }
-
-    public List<Vehicle> getRentedVehicles() {
-        return new ArrayList<>(rentedVehicles);
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public int getSpaces() {
-        return spaces;
-    }
-
-    public String[] getAccessibleLots() {
-        return accessibleLots;
-    }
-
-    public void loadRandomVehicles() throws IOException {
-        int vehiclesToLoad = spaces / 2;
+    public void loadRandomVehicles(int vehiclesToLoad) throws IOException {
         System.out.println("\nLoading " + vehiclesToLoad + " random vehicles from accessible lots...");
         
         // Get all vehicles from accessible lots
@@ -233,5 +236,44 @@ public class RentalShop {
         availableVehicles.remove(leastUsedVehicle);
         
         System.out.println("Successfully returned vehicle to lot " + leastUsedLot);
+    }
+
+
+    private void DoTransaction(Vehicle CurrentVehicle, int kilometers) {
+        int price = 0;
+
+        if (CurrentVehicle.getDiscount()) {
+            price = (int)(kilometers * 0.9);
+            MoneyLost = MoneyLost + (int)(kilometers * 0.1);
+            System.out.println("The car was returned with a discount");
+        } else {
+            price = kilometers;
+        }
+        
+        Money = Money + price;
+        System.out.println("The store charged " + Money + " dollars for the return of the car");
+
+        vehiclePrices.put(CurrentVehicle, price);
+    
+    }
+
+    public List<Vehicle> getAvailableVehicles() {
+        return new ArrayList<>(availableVehicles);
+    }
+
+    public List<Vehicle> getRentedVehicles() {
+        return new ArrayList<>(rentedVehicles);
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public int getSpaces() {
+        return spaces;
+    }
+
+    public String[] getAccessibleLots() {
+        return accessibleLots;
     }
 } 

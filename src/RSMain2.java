@@ -18,11 +18,15 @@ public class RSMain2 {
 
             // Create a new rental shop with the specified parameters
             rentalShop = new RentalShop(location, spaces, accessibleLots);
-            rentalShop.loadRandomVehicles();
+            rentalShop.loadRandomVehicles(spaces / 2);
             // Example usage of the rent method
             //rentalShop.rent("SEDAN");
-            rentalShop.returnVehicle("QQA-896", 100);
-            
+            rentalShop.returnVehicle("XIW-810", 100);
+            rentalShop.returnVehicle("VWB-605", 100);
+            rentalShop.returnVehicle("PZT-000", 100);
+            rentalShop.returnVehicle("GBS-250", 100);
+            rentalShop.TransactionHistory();
+
             rentalShop.returnAllVehicles();
 
         } catch (IOException e) {
