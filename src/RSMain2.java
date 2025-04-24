@@ -22,9 +22,6 @@ public class RSMain2 {
             // Example usage of the rent method
             //rentalShop.rent("SEDAN");
             rentalShop.returnVehicle("XIW-810", 100);
-            rentalShop.returnVehicle("VWB-605", 100);
-            rentalShop.returnVehicle("PZT-000", 100);
-            rentalShop.returnVehicle("GBS-250", 100);
             rentalShop.TransactionHistory();
 
             rentalShop.returnAllVehicles();

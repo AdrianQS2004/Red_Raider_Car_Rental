@@ -123,12 +123,17 @@ public class RentalShop {
             vehicle.AddKilometers(kilometers);
             System.out.println("Updated kilometers to: " + kilometers);
             
+            //Calculates and saves the Money made by the store
+            DoTransaction(vehicle, kilometers);
+            //Makes sure to toggle off the discount after the return
+            if (vehicle.getDiscount()) {
+                vehicle.toggleDiscount();
+            } 
+
             // Add to available vehicles
             availableVehicles.add(vehicle);
             System.out.println("Added vehicle to available vehicles list");
-            
-            //Calculates and saves the Money made by the store
-            DoTransaction(vehicle, kilometers);
+    
 
             // Check if we only have one space left before reaching capacity
             if (availableVehicles.size() == spaces - 1) {
