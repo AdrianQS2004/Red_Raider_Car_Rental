@@ -292,23 +292,4 @@ public class RentalShop {
 
     }
 
-    public List<Vehicle> getAvailableVehicles() {
-        return new ArrayList<>(availableVehicles);
-    }
-
-    public List<Vehicle> getRentedVehicles() {
-        return new ArrayList<>(rentedVehicles);
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public int getSpaces() {
-        return spaces;
-    }
-
-    public String[] getAccessibleLots() {
-        return accessibleLots;
-    }
 } 

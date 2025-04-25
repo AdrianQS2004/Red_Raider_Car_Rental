@@ -78,6 +78,7 @@ public class RSMain2 {
 
         // Create a new rental shop with the specified parameters
         RentalShop rentalShop = new RentalShop(location, spaces, accessibleLots);
+        // Loads random vehicles into the shop
         rentalShop.loadRandomVehicles(spaces / 2);
         
         // Print available commands
@@ -88,6 +89,7 @@ public class RSMain2 {
         System.out.println("LIST - Shows the current state of the shop");
         System.out.println("Exit - Exits the program");
         
+        // Creates a scanner to read the user's input
         Scanner scanner = new Scanner(System.in);
         String input;
         

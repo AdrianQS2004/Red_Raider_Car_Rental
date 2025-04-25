@@ -17,7 +17,7 @@ public class LMMain {
         String plateToRemove = null;
         boolean allArgsFound = true;
 
-        // Parse named arguments
+        // Makes sure the arguments follow the correct format
         for (String arg : args) {
             if (arg.startsWith("--lot-name=")) {
                 lotName = arg.substring("--lot-name=".length());
