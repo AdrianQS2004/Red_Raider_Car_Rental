@@ -18,7 +18,6 @@ public class ManagerLot {
         vehicles = FileManager.addVehicles(vehicles, "SEDAN", sedans, plateGenerator);
         vehicles = FileManager.addVehicles(vehicles, "SUV", suvs, plateGenerator);
         vehicles = FileManager.addVehicles(vehicles, "VAN", vans, plateGenerator);
-
         if (removePlate != null && !removePlate.isEmpty()) {
             boolean removed = vehicles.removeIf(v -> v.getLicensePlate().equals(removePlate));
             if (removed) {
@@ -26,6 +25,9 @@ public class ManagerLot {
                 plateGenerator.loadExistingPlates(vehicles.stream()
                     .map(Vehicle::getLicensePlate)
                     .collect(Collectors.toSet()));
+                System.out.println("Vehicle with plate " + removePlate + " was successfully removed.");
+            } else {
+                System.out.println("Vehicle with plate " + removePlate + " was not found in the lot.");
             }
         }
 

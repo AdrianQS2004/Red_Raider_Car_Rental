@@ -4,15 +4,37 @@ import java.io.IOException;
 public class LMMain {
     public static void main(String[] args) {
         if (args.length < 4) {
-            System.out.println("Usage: java Main <lotName> <numSedans> <numSUVs> <numVans> [optional: plateToRemove]");
+            System.out.println("Usage: java LMMain --lot-name=lotName -add-sedan=numSedans -add-suv=numSUVs -add-van=numVans [--remove-vehicle=plateToRemove]");
+            System.out.println("Example: java LMMain --lot-name=Airport Lot -add-sedan=8 -add-suv=5 -add-van=8 --remove-vehicle=WYI-170");
             return;
         }
 
-        String lotName = args[0];
-        int sedans = Integer.parseInt(args[1]);
-        int suvs = Integer.parseInt(args[2]);
-        int vans = Integer.parseInt(args[3]);
-        String plateToRemove = args.length >= 5 ? args[4] : null;
+        String lotName = null;
+        int sedans = 0;
+        int suvs = 0;
+        int vans = 0;
+        String plateToRemove = null;
+
+        // Parse named arguments
+        for (String arg : args) {
+            if (arg.startsWith("--lot-name=")) {
+                lotName = arg.substring("--lot-name=".length());
+            } else if (arg.startsWith("-add-sedan=")) {
+                sedans = Integer.parseInt(arg.substring("-add-sedan=".length()));
+            } else if (arg.startsWith("-add-suv=")) {
+                suvs = Integer.parseInt(arg.substring("-add-suv=".length()));
+            } else if (arg.startsWith("-add-van=")) {
+                vans = Integer.parseInt(arg.substring("-add-van=".length()));
+            } else if (arg.startsWith("--remove-vehicle=")) {
+                plateToRemove = arg.substring("--remove-vehicle=".length());
+            }
+        }
+
+        // Validate required arguments
+        if (lotName == null) {
+            System.out.println("Error: --lot-name is required");
+            return;
+        }
 
         try {
             ManagerLot lotManager = new ManagerLot();

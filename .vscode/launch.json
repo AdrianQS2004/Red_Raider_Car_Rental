@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "LMMain",
             "projectName": "Red_Raider_Car_Rental_9769d3df",
-            "args": ["Mall Lot","8","5","8"]
+            "args": ["--lot-name=Airport Lot","-add-sedan=1","-add-suv=2","-add-van=1","--remove-vehicle=RLS-224"]
         }
     ]
 }
