@@ -6,7 +6,8 @@ public class RSMain2 {
     public static void main(String[] args) throws IOException {
         if (args.length != 3) {
             System.out.println("Usage: java RSMain2 <location> <spaces> <lotNames>");
-            System.out.println("Example: java RSMain2 \"Los Angeles\" \"20\" \"central,airport,city park\"");
+            System.out.println("Valid arguments are: -location=<name>, --spaces-available=<n>, --lots=<name1,name2,...>");
+            System.out.println("Example: -location=Los Angeles --spaces-available=10 --lots=Airport Lot,central");
             return;
         }
 
@@ -17,19 +18,34 @@ public class RSMain2 {
 
         // Parse named arguments
         for (String arg : args) {
+
             if (arg.startsWith("-location=")) {
                 location = arg.substring("-location=".length());
             } else if (arg.startsWith("--spaces-available=")) {
-                spaces = Integer.parseInt(arg.substring("--spaces-available=".length()));
+                try {
+                    spaces = Integer.parseInt(arg.substring("--spaces-available=".length()));
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: --spaces-available must be a number");
+                    return;
+                }
             } else if (arg.startsWith("--lots=")) {
                 lotsArg = arg.substring("--lots=".length());
+            } else {
+                System.out.println("Error: Unknown argument format: " + arg);
+                System.out.println("Valid arguments are: -location=<name>, --spaces-available=<n>, --lots=<name1,name2,...>");
+                return;
             }
         }
 
-        // If named arguments are used, update args array
-        if (location != null && spaces != 0 && lotsArg != null) {
-            args = new String[]{location, String.valueOf(spaces), lotsArg};
+        // Validate that all required arguments are present
+        if (location == null || spaces == 0 || lotsArg == null) {
+            System.out.println("Error: All arguments are required: -location, --spaces-available, --lots");
+            System.out.println("Example: -location=Los Angeles --spaces-available=10 --lots=Airport Lot,central");
+            return;
         }
+
+        // If named arguments are used, update args array
+        args = new String[]{location, String.valueOf(spaces), lotsArg};
 
         // Check if any of the specified lots exist
         String[] requestedLots = args[2].split(",");
