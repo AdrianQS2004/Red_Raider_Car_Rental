@@ -1,6 +1,3 @@
 KTG-841,SUV,0,false
 SHL-790,VAN,0,false
 USZ-406,VAN,0,false
-PRE-755,SUV,0,false
-FJV-779,VAN,0,false
-XWL-991,SUV,0,false

@@ -16,7 +16,7 @@ public class RSMain2 {
 
         // Create a new rental shop with the specified parameters
         RentalShop rentalShop = new RentalShop(location, spaces, accessibleLots);
-        rentalShop.loadRandomVehicles(spaces / 2);
+        rentalShop.loadRandomVehicles(spaces - 2);
         // Print available commands
         System.out.println("\nAvailable Commands:");
         System.out.println("RENT <Vehicle Type> - Example: RENT SUV");

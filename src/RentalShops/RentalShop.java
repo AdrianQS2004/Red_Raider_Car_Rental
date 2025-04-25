@@ -114,6 +114,8 @@ public class RentalShop {
             Vehicle vehicle = vehicleOpt.get();
             System.out.println("Found vehicle: " + vehicle.getType() + " - " + vehicle.getLicensePlate());
             
+            System.out.println("Discount applied: " + vehicle.getDiscount());
+
             // Remove from rented vehicles
             rentedVehicles.remove(vehicle);
             System.out.println("Removed vehicle from rented cars list");
@@ -230,6 +232,9 @@ public class RentalShop {
     }
 
     private void returnLeastUsedVehicle() throws IOException {
+
+        System.out.println("\nThere is only one space left, returning the least used vehicle to a random lot");
+
         if (availableVehicles.isEmpty()) {
             System.out.println("No vehicles available to return.");
             return;
@@ -265,7 +270,7 @@ public class RentalShop {
         // Remove from available vehicles
         availableVehicles.remove(leastUsedVehicle);
         
-        System.out.println("Successfully returned vehicle to lot " + leastUsedLot);
+        System.out.println("Successfully returned vehicle to lot " + leastUsedLot + "\n");
     }
 
 
