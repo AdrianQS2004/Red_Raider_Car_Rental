@@ -10,13 +10,60 @@ public class RSMain2 {
             return;
         }
 
-        String location = args[0];
-        int spaces = Integer.parseInt(args[1]);
+        //Makes sure the arguments follow the correct format
+        String location = null;
+        int spaces = 0;
+        String lotsArg = null;
+
+        // Parse named arguments
+        for (String arg : args) {
+            if (arg.startsWith("-location=")) {
+                location = arg.substring("-location=".length());
+            } else if (arg.startsWith("--spaces-available=")) {
+                spaces = Integer.parseInt(arg.substring("--spaces-available=".length()));
+            } else if (arg.startsWith("--lots=")) {
+                lotsArg = arg.substring("--lots=".length());
+            }
+        }
+
+        // If named arguments are used, update args array
+        if (location != null && spaces != 0 && lotsArg != null) {
+            args = new String[]{location, String.valueOf(spaces), lotsArg};
+        }
+
+        // Check if any of the specified lots exist
+        String[] requestedLots = args[2].split(",");
+        StringBuilder validLots = new StringBuilder();
+        boolean foundValidLot = false;
+
+        for (String lot : requestedLots) {
+            String lotFileName = "src/SharedFiles/lots/" + lot.trim() + ".txt";
+            java.io.File lotFile = new java.io.File(lotFileName);
+            
+            if (lotFile.exists()) {
+                if (foundValidLot) {
+                    validLots.append(",");
+                }
+                validLots.append(lot.trim());
+                foundValidLot = true;
+            } else {
+                System.out.println("Warning: Lot '" + lot.trim() + "' does not exist");
+            }
+        }
+
+        if (!foundValidLot) {
+            System.out.println("Error: None of the specified lots exist. Program will exit.");
+            return;
+        }
+
+        // Replace args[2] with only valid lots
+        args[2] = validLots.toString();
         String[] accessibleLots = args[2].split(",");
 
         // Create a new rental shop with the specified parameters
         RentalShop rentalShop = new RentalShop(location, spaces, accessibleLots);
         rentalShop.loadRandomVehicles(spaces / 2);
+        
         // Print available commands
         System.out.println("\nAvailable Commands:");
         System.out.println("RENT <Vehicle Type> - Example: RENT SUV");
