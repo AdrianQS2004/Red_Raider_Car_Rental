@@ -1,3 +1,0 @@
-KTG-841,SUV,0,false
-SHL-790,VAN,0,false
-USZ-406,VAN,0,false
