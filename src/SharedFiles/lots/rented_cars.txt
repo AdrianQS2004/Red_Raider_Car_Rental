@@ -1,1 +1,3 @@
-PRE-755,SUV,0,false
+MXM-961,SUV,0,false
+TFL-526,VAN,0,false
+KTG-841,SUV,0,false

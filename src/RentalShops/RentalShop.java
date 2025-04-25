@@ -147,6 +147,19 @@ public class RentalShop {
         }
     }
 
+    public void ListStateOfShop() {
+        System.out.println("\nState of the shop: \n");
+        System.out.println("Location: " + location);
+        System.out.println("Spaces Used: " + availableVehicles.size());
+        System.out.println("Empty Spaces: " + (spaces - availableVehicles.size()));
+        System.out.println("Available Vehicles: ");
+        for (Vehicle vehicle : availableVehicles) {
+            System.out.println(vehicle.getType() + " - " + vehicle.getLicensePlate());
+        }
+        System.out.println("Total Money Made: $" + Money);
+        
+    }
+
     public void TransactionHistory() {
         System.out.println("\nTransaction History: \n");
         for (Vehicle vehicle : vehiclePrices.keySet()) {
@@ -183,8 +196,11 @@ public class RentalShop {
         
         // Get all vehicles from accessible lots
         List<Vehicle> allVehicles = new ArrayList<>();
+        Map<String, List<Vehicle>> lotVehiclesMap = new HashMap<>();
+        
         for (String lotName : accessibleLots) {
             List<Vehicle> lotVehicles = FileManager.loadLotFile(lotName.trim());
+            lotVehiclesMap.put(lotName, lotVehicles);
             allVehicles.addAll(lotVehicles);
         }
         
@@ -199,6 +215,16 @@ public class RentalShop {
             Vehicle selectedVehicle = allVehicles.remove(randomIndex);
             availableVehicles.add(selectedVehicle);
             System.out.println("Added vehicle: " + selectedVehicle.getType() + " - " + selectedVehicle.getLicensePlate());
+            
+            // Remove the vehicle from its original lot
+            for (Map.Entry<String, List<Vehicle>> entry : lotVehiclesMap.entrySet()) {
+                List<Vehicle> lotVehicles = entry.getValue();
+                if (lotVehicles.removeIf(v -> v.getLicensePlate().equals(selectedVehicle.getLicensePlate()))) {
+                    // Save the updated lot
+                    FileManager.saveLotFile(entry.getKey().trim(), lotVehicles);
+                    break;
+                }
+            }
         }
         
         System.out.println("Successfully loaded " + availableVehicles.size() + " vehicles into the shop.");

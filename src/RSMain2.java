@@ -22,6 +22,7 @@ public class RSMain2 {
         System.out.println("RENT <Vehicle Type> - Example: RENT SUV");
         System.out.println("RETURN <LICENSE PLATE> <KILOMETERS> - Example: RETURN XIW-810 100");
         System.out.println("TRANSACTIONS - Shows transaction history");
+        System.out.println("LIST - Shows the current state of the shop");
         System.out.println("Exit - Exits the program");
         
         Scanner scanner = new Scanner(System.in);
@@ -73,6 +74,10 @@ public class RSMain2 {
                     
                 case "TRANSACTIONS":
                     rentalShop.TransactionHistory();
+                    break;
+
+                case "LIST":
+                    rentalShop.ListStateOfShop();
                     break;
                     
                 default:

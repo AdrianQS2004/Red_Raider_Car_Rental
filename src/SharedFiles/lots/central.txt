@@ -7,8 +7,6 @@ QOP-801,SUV,0,false
 MXM-961,SUV,0,false
 XWL-991,SUV,0,false
 CAU-247,SUV,0,false
-CIY-444,SUV,0,false
-CCQ-150,SUV,0,false
 LAG-545,VAN,0,false
 USZ-406,VAN,0,false
 CMU-739,VAN,0,false
@@ -23,9 +21,7 @@ IIQ-307,SUV,0,false
 LAG-545,VAN,0,false
 GEI-314,VAN,0,false
 QOP-801,SUV,0,false
-CIY-444,SUV,0,false
 XIW-810,SEDAN,0,false
-CCQ-150,SUV,0,false
 QQA-896,SEDAN,100,false
 PRE-755,SUV,0,false
 GEI-314,VAN,0,false
