@@ -113,16 +113,14 @@ public class RentalShop {
         if (vehicleOpt.isPresent()) {
             Vehicle vehicle = vehicleOpt.get();
             System.out.println("Found vehicle: " + vehicle.getType() + " - " + vehicle.getLicensePlate());
-            
-            System.out.println("Discount applied: " + vehicle.getDiscount());
+        
 
             // Remove from rented vehicles
             rentedVehicles.remove(vehicle);
-            System.out.println("Removed vehicle from rented cars list");
             
             // Update kilometers
             vehicle.AddKilometers(kilometers);
-            System.out.println("Updated kilometers to: " + kilometers);
+            System.out.println("Updated kilometers to: " + vehicle.getKilometers());
             
             //Calculates and saves the Money made by the store
             DoTransaction(vehicle, kilometers);
@@ -142,7 +140,6 @@ public class RentalShop {
             }
             // Save changes to rented cars file
             FileManager.saveLotFile(RENTED_CARS_FILE, rentedVehicles);
-            System.out.println("Successfully saved changes to rented cars file");
         } else {
             System.out.println("No vehicle found with license plate: " + licensePlate);
         }
@@ -287,15 +284,12 @@ public class RentalShop {
         
         Money = Money + price;
         System.out.println("The store charged " + price + " dollars for the return of the car");
-        vehiclePrices.put(CurrentVehicle, price);
-        System.out.println("DISCOUNT?: " + CurrentVehicle.getDiscount());
-        Vehicle mapVehicle = vehiclePrices.keySet().stream()
-                .filter(v -> v.getLicensePlate().equals(CurrentVehicle.getLicensePlate()))
-                .findFirst()
-                .get();
-        System.out.println("The discount value for " + CurrentVehicle.getLicensePlate() + " is: " + mapVehicle.getDiscount());
+        
+        // Create a new Vehicle object with the same properties
+        Vehicle transactionVehicle = new Vehicle(CurrentVehicle.getLicensePlate(), CurrentVehicle.getType(), CurrentVehicle.getKilometers());
+        transactionVehicle.setDiscount(CurrentVehicle.getDiscount());
+        vehiclePrices.put(transactionVehicle, price);
 
-        TransactionHistory();
     }
 
     public List<Vehicle> getAvailableVehicles() {
