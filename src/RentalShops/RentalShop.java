@@ -27,24 +27,6 @@ public class RentalShop {
         loadRentedVehicles();
     }
 
-    private void loadRentedVehicles() {
-        try {
-            List<Vehicle> loadedVehicles = FileManager.loadLotFile(RENTED_CARS_FILE);
-            rentedVehicles.addAll(loadedVehicles);
-        } catch (IOException e) {
-            System.err.println("Error loading rented vehicles: " + e.getMessage());
-        }
-    }
-
-    private void saveRentedVehicles() {
-        try {
-            // Save all rented vehicles
-            FileManager.saveLotFile(RENTED_CARS_FILE, rentedVehicles);
-        } catch (IOException e) {
-            System.err.println("Error saving rented vehicles: " + e.getMessage());
-        }
-    }
-
     public void rent(String vehicleType) throws IOException {
         System.out.println("\nAttempting to rent a " + vehicleType + "...");
         
@@ -291,5 +273,22 @@ public class RentalShop {
         vehiclePrices.put(transactionVehicle, price);
 
     }
+    
+    private void loadRentedVehicles() {
+        try {
+            List<Vehicle> loadedVehicles = FileManager.loadLotFile(RENTED_CARS_FILE);
+            rentedVehicles.addAll(loadedVehicles);
+        } catch (IOException e) {
+            System.err.println("Error loading rented vehicles: " + e.getMessage());
+        }
+    }
 
+    private void saveRentedVehicles() {
+        try {
+            // Save all rented vehicles
+            FileManager.saveLotFile(RENTED_CARS_FILE, rentedVehicles);
+        } catch (IOException e) {
+            System.err.println("Error saving rented vehicles: " + e.getMessage());
+        }
+    }
 } 
