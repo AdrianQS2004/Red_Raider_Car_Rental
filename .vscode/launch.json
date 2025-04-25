@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "LMMain",
             "projectName": "Red_Raider_Car_Rental_9769d3df",
-            "args": ["Airport Lot","5","8","7"]
+            "args": ["Mall Lot","8","5","8"]
         }
     ]
 }

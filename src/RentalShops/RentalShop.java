@@ -287,9 +287,15 @@ public class RentalShop {
         
         Money = Money + price;
         System.out.println("The store charged " + price + " dollars for the return of the car");
-
         vehiclePrices.put(CurrentVehicle, price);
-    
+        System.out.println("DISCOUNT?: " + CurrentVehicle.getDiscount());
+        Vehicle mapVehicle = vehiclePrices.keySet().stream()
+                .filter(v -> v.getLicensePlate().equals(CurrentVehicle.getLicensePlate()))
+                .findFirst()
+                .get();
+        System.out.println("The discount value for " + CurrentVehicle.getLicensePlate() + " is: " + mapVehicle.getDiscount());
+
+        TransactionHistory();
     }
 
     public List<Vehicle> getAvailableVehicles() {

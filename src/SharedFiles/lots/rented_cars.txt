@@ -1,0 +1,4 @@
+WTK-963,SUV,0,false
+PMI-301,VAN,0,false
+DWC-364,SUV,140,false
+JMG-258,SUV,0,false
