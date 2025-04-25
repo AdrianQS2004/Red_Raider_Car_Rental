@@ -61,7 +61,6 @@ public class RentalShop {
             saveRentedVehicles();
             System.out.println("Successfully rented " + vehicle.getLicensePlate() + " from available vehicles!");
             if (availableVehicles.size() == 0) {
-                System.out.println("No available vehicles, loading a random vehicle...");
                 loadRandomVehicles(1);
             }
             return;
@@ -282,7 +281,7 @@ public class RentalShop {
         }
         
         Money = Money + price;
-        System.out.println("The store charged " + Money + " dollars for the return of the car");
+        System.out.println("The store charged " + price + " dollars for the return of the car");
 
         vehiclePrices.put(CurrentVehicle, price);
     
