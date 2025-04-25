@@ -34,6 +34,7 @@ public class RSMain2 {
             
             if (input.equalsIgnoreCase("Exit")) {
                 System.out.println("Exiting program...");
+                rentalShop.returnAllVehicles();
                 break;
             }
             
