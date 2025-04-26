@@ -24,7 +24,6 @@ public class RentalShop {
         this.availableVehicles = new ArrayList<>();
         this.rentedVehicles = new ArrayList<>();
         this.random = new Random();
-        loadRentedVehicles();
     }
 
     //This method searches if a car is available in the shop or accessible lots
@@ -34,7 +33,7 @@ public class RentalShop {
 
     public void rent(String vehicleType) throws IOException {
         System.out.println("\nAttempting to rent a " + vehicleType + "...");
-        
+        loadRentedVehicles();
         // First, search in available vehicles
         Optional<Vehicle> vehicleOpt = availableVehicles.stream()
             .filter(v -> v.getType().equalsIgnoreCase(vehicleType))
@@ -48,6 +47,7 @@ public class RentalShop {
             saveRentedVehicles();
             System.out.println("Successfully rented " + vehicle.getLicensePlate() + " from available vehicles!");
             if (availableVehicles.size() == 0) {
+                System.out.println("No available vehicles in the shop");
                 loadRandomVehicles(1);
             }
             return;
@@ -317,11 +317,10 @@ public class RentalShop {
     }
     
     // The following two methods simply are called to load and save the rented vehicles
-    
+
     private void loadRentedVehicles() {
         try {
-            List<Vehicle> loadedVehicles = FileManager.loadLotFile(RENTED_CARS_FILE);
-            rentedVehicles.addAll(loadedVehicles);
+           rentedVehicles = FileManager.loadLotFile(RENTED_CARS_FILE);
         } catch (IOException e) {
             System.err.println("Error loading rented vehicles: " + e.getMessage());
         }
