@@ -91,6 +91,7 @@ public class RentalShop {
     // If found, it removes it from the rented vehicles and updates the kilometers
     // Then it calculates the money made by the store and saves the rented vehicles
     // It also makes sure to toggle off the discount after the return
+ 
     // This method was AI helped
 
     public void returnVehicle(String licensePlate, int kilometers) throws IOException {

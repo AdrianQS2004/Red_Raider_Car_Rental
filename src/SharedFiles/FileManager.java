@@ -40,7 +40,8 @@ public class FileManager {
 
     //This method was AI helped 
     /*
-     * Create method that saves a a list of vehicles to a text file with the name given in the lotName parameter
+     * Create method that saves a a list of vehicles to a text file with the name 
+     * given in the lotName parameter.
      * Make sure to create a new text file if one with the given name does not exist.
      * Make sure to write to the directory as saved in the LOTS_DIR variable.
      * And make sure to write the vehicles to the file in the correct format.
