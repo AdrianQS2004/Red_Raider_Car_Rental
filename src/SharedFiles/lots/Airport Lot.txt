@@ -1,5 +1,4 @@
 PJM-506,SUV,0,false
-GVN-357,SUV,0,false
 HZK-234,VAN,0,false
 ORZ-543,VAN,0,false
 WFP-431,SUV,0,false
@@ -32,3 +31,18 @@ SHL-790,VAN,3500,false
 NYI-892,VAN,0,false
 JLR-077,SEDAN,1999,false
 WTK-963,SUV,3000,false
+FIQ-511,SUV,1000,false
+EKP-232,SEDAN,0,false
+ZGF-704,SEDAN,0,false
+NNN-306,SEDAN,0,false
+VPB-794,SEDAN,0,false
+QLF-747,SUV,0,false
+FEY-721,SUV,0,false
+QAV-012,SUV,0,false
+HDQ-016,SUV,0,false
+MCW-223,SUV,0,false
+ZPI-645,VAN,0,false
+GJB-519,VAN,0,false
+FOV-912,VAN,0,false
+CAP-586,VAN,0,false
+ABP-054,VAN,0,false

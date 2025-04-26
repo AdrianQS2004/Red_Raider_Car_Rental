@@ -7,7 +7,7 @@
             "request": "launch",
             "mainClass": "RSMain2",
             "projectName": "Red_Raider_Car_Rental_9769d3df",
-            "args": ["-location=Los Angeles", "--spaces-available=9", "--lots=Airport Lot,Central"]
+            "args": ["-location=San_Jose", "--spaces-available=5", "--lots=Mall Lot"]
             //"args": ["Airport Lot","13","6","4"]
         },
         {
@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "LMMain",
             "projectName": "Red_Raider_Car_Rental_9769d3df",
-            "args": ["--lot-name=Airport Lot","-add-sedan=2","--remove-vehicle=RLS-224"]
+            "args": ["--lot-name=Airport Lot","-add-sedan=2","-add-suv=5","-add-van=5","--remove-vehicle=GVN-357"]
         }
     ]
 }
