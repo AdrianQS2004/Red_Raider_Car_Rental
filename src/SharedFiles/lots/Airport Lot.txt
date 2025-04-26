@@ -1,6 +1,5 @@
 PZT-000,SEDAN,100,true
 CAU-247,SUV,0,false
-UHW-671,SEDAN,0,false
 UCU-449,SEDAN,0,false
 PJM-506,SUV,0,false
 GVN-357,SUV,0,false
@@ -35,7 +34,8 @@ KXB-748,VAN,1000,false
 CEC-095,SUV,0,false
 YAF-147,SEDAN,0,false
 TSK-854,VAN,0,false
-DUR-882,VAN,0,false
 LVR-823,SEDAN,0,false
 HTE-328,SEDAN,0,false
 JCM-966,SUV,0,false
+DUR-882,VAN,0,false
+INP-062,VAN,0,false

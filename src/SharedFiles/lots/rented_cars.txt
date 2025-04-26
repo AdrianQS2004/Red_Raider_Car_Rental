@@ -1,2 +1,1 @@
 WTK-963,SUV,0,false
-PMI-301,VAN,0,false

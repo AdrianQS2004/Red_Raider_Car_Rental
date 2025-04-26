@@ -51,7 +51,7 @@ public class LMMain {
             }
         }
 
-        // Check if all required arguments were found
+        // Check if all of the required arguments were found
         if (!allArgsFound || lotName == null) {
             System.out.println("Error: All required arguments must be provided correctly");
             System.out.println("Valid arguments are: --lot-name=<name>, -add-sedan=<n>, -add-suv=<n>, -add-van=<n>, [--remove-vehicle=<plate>]");

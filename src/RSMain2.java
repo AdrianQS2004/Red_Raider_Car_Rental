@@ -93,6 +93,8 @@ public class RSMain2 {
         Scanner scanner = new Scanner(System.in);
         String input;
         
+
+        // The following loops acts as the Command Line Interface of the program
         while (true) {
             System.out.print("\nEnter command: ");
             input = scanner.nextLine().trim();

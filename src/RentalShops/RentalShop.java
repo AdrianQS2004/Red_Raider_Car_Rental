@@ -27,6 +27,11 @@ public class RentalShop {
         loadRentedVehicles();
     }
 
+    //This method searches if a car is available in the shop or accessible lots
+    //If found, it removes it from the available vehicles and adds it to the rented vehicles
+    //If not found it loads a random vehicle from the accessible lots and makes sure to toggle the discount to ture
+    //Then it adds the vehicle to the rented vehicles and saves the rented vehicles
+
     public void rent(String vehicleType) throws IOException {
         System.out.println("\nAttempting to rent a " + vehicleType + "...");
         
@@ -80,6 +85,13 @@ public class RentalShop {
 
         System.out.println("No " + vehicleType + " available in any accessible lot.");
     }
+ 
+    // This method returns a vehicle to the shop / the accessible lots list
+    // It loads all of the rented vehicles and searches for the vehicle with the given license plate
+    // If found, it removes it from the rented vehicles and updates the kilometers
+    // Then it calculates the money made by the store and saves the rented vehicles
+    // It also makes sure to toggle off the discount after the return
+    // This method was AI helped
 
     public void returnVehicle(String licensePlate, int kilometers) throws IOException {
         System.out.println("\nAttempting to return vehicle with plate: " + licensePlate);
@@ -87,20 +99,26 @@ public class RentalShop {
         // Load all rented vehicles
         List<Vehicle> rentedVehicles = FileManager.loadLotFile(RENTED_CARS_FILE);
         
-        // Search for the vehicle with the given license plate
-        Optional<Vehicle> vehicleOpt = rentedVehicles.stream()
-            .filter(v -> v.getLicensePlate().equals(licensePlate))
-            .findFirst();
+        // Searches for the vehicle with the given license plate
+
+        /*
+         * Create a condition so that we check if the vehicle given in the parameter is in the rentedVehicles list
+         * It should then print a confirmation message
+         * 
+         */
+        Optional<Vehicle> vehicleOpt = rentedVehicles.stream() //
+            .filter(v -> v.getLicensePlate().equals(licensePlate)) //
+            .findFirst(); //
             
-        if (vehicleOpt.isPresent()) {
-            Vehicle vehicle = vehicleOpt.get();
-            System.out.println("Found vehicle: " + vehicle.getType() + " - " + vehicle.getLicensePlate());
+        if (vehicleOpt.isPresent()) { //
+            Vehicle vehicle = vehicleOpt.get();  //
+            System.out.println("Found vehicle: " + vehicle.getType() + " - " + vehicle.getLicensePlate()); //
         
 
             // Remove from rented vehicles
             rentedVehicles.remove(vehicle);
             
-            // Update kilometers
+            // Updates the kilometers of the vehicle
             vehicle.AddKilometers(kilometers);
             System.out.println("Updated kilometers to: " + vehicle.getKilometers());
             
@@ -120,12 +138,17 @@ public class RentalShop {
             if (availableVehicles.size() == spaces - 1) {
                 returnLeastUsedVehicle();
             }
+
             // Save changes to rented cars file
             FileManager.saveLotFile(RENTED_CARS_FILE, rentedVehicles);
         } else {
             System.out.println("No vehicle found with license plate: " + licensePlate);
         }
     }
+
+    // This method lists the state of the shop
+    // It prints the location, the number of spaces used, the number of empty spaces, and the available vehicles
+    // It also prints the total money made by the store
 
     public void ListStateOfShop() {
         System.out.println("\nState of the shop: \n");
@@ -140,6 +163,10 @@ public class RentalShop {
         
     }
 
+    // This method prints the transaction history
+    // It prints all of the cars returned to the store, and the price of each transaction
+    // It also prints the total money lost by discounts and the total money made by the store
+
     public void TransactionHistory() {
         System.out.println("\nTransaction History: \n");
         for (Vehicle vehicle : vehiclePrices.keySet()) {
@@ -150,6 +177,9 @@ public class RentalShop {
         System.out.println("Total Money Lost: $" + MoneyLost);
         System.out.println("Total Money Made: $" + Money);
     }
+
+    // This method is used to safely return the cars taken from the accessible lots at the beggining of the program
+    // If this mehtod is not called before the program ends, the data of the cars taken from the accessible lots will be lost
 
     public void returnAllVehicles() throws IOException {
         // Only return available vehicles to random lots
@@ -170,6 +200,10 @@ public class RentalShop {
         // Clear available vehicles list
         availableVehicles.clear();
     }
+
+    // This method loads a given number of vehicles into the shop
+    // It loads all of the vehicles from the accessible lots and randomly selects a certain number of them
+    // Then it adds them to the available vehicles list
 
     public void loadRandomVehicles(int vehiclesToLoad) throws IOException {
         System.out.println("\nLoading " + vehiclesToLoad + " random vehicles from accessible lots...");
@@ -209,6 +243,10 @@ public class RentalShop {
         
         System.out.println("Successfully loaded " + availableVehicles.size() + " vehicles into the shop.");
     }
+
+    // This method returns the least used vehicle to a random lot
+    // It finds the vehicle with the least kilometers and returns it to a random lot
+    // Then it removes it from the available vehicles list
 
     private void returnLeastUsedVehicle() throws IOException {
 
@@ -252,6 +290,10 @@ public class RentalShop {
         System.out.println("Successfully returned vehicle to lot " + leastUsedLot + "\n");
     }
 
+    // This method calculates the price of the vehicle based on the kilometers and the discount
+    // It also updates the total money made by the store and the total money lost by discounts
+    // It also creates a new Vehicle object with the same properties and adds it to the vehiclePrices map
+    // The vehiclePrices map saves the price of each transaction made to the store
 
     private void DoTransaction(Vehicle CurrentVehicle, int kilometers) {
         int price = 0;
@@ -273,6 +315,8 @@ public class RentalShop {
         vehiclePrices.put(transactionVehicle, price);
 
     }
+    
+    // The following two methods simply are called to load and save the rented vehicles
     
     private void loadRentedVehicles() {
         try {
